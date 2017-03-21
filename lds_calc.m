@@ -12,7 +12,7 @@ function [divergence,lds]=lds_calc(state,ws,fs,period, plotje)
 
 
 %% setting up some variables
-ws          = round(ws*fs); % as was is input in cycles, and better to have it in samples
+ws          = round(ws*fs); % as ws is input in cycles, and better to have it in samples
 [m,n]       = size(state);
 state       = [state;NaN*ones(ws,n)]; % we extend the state space with NaN, so that we don't run into problems later
 divergence  = NaN*ones(m,ws); % set up the output divergence matrix

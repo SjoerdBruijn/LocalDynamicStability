@@ -14,11 +14,13 @@ function [state]=makestatelocal(signal,hc,n_dim)
 %           (i.e. 100 samples per stride on average.
 
 %% time normalization
-n_strides   = length(hc);
+n_strides   = length(hc); % how much heelstrikes do we have
+n_samples   = (n_strides-1)*100;% amount of samples we will normalize to
 signal_new  = signal(hc(1):hc(end));% take out only the time period we need
-t_new       = 0:1:((length(signal_new)-1)); % fix time axis for time normalization
-t_interp    = (1:(n_strides-1)*100)/((n_strides-1)*100)*t_new(end); % new time axis, contains (n_steps-1)*100 data points
+t_new       = 1:length(signal_new); % fix time axis for time normalization
+t_interp    = 1:n_samples/n_samples*t_new(end); % new time axis, contains (n_steps-1)*100 data points
 signal_interp = interp1(t_new,signal_new,t_interp,'spline'); % interpolate
+
 %% create state space
 delay = 10;
 state = [];
