@@ -1,15 +1,32 @@
 function [divergence,lds]=lds_calc(state,ws,fs,period, plotje)
 % calculate local dynamic stability ( max lyapunov exponent), according to Rosenstein (1993) algorithm
-% Input:    state: appropriate state space 
+% Input:    state: appropriate state space
 %           ws: window size over which divergence should be calculated(in seconds/cycles)
-%           fs: sample frequency 
-%           period: dominant period in the signal(in samples), 
+%           fs: sample frequency
+%           period: dominant period in the signal(in samples),
 %           plotje: show a graph.
-% Output:   divergence: the divergence curve  
+% Output:   divergence: the divergence curve
 %           lds: the 2 estimates of the local divergence exponents ( long term and short term)
-% note that in this version ws should be larger then 4*period, as the long
-% term divergence is calculated from 4*period to ws*fs.
-
+%           note that if ws is not larger then 4*period, long term is not calculated,
+%           as this is normally calculated 4*period to ws.
+% Note:     The slope calculated is from 0-0.5 strides, and from 4-10
+%           strides. when trying to calculate a 'real' Lyapunov exponent from a
+%           system, you will have to calculate the slope at an appropriate point in
+%           the divergence curve yourself. 
+%% Copyright
+%     COPYRIGHT (c) 2017 Sjoerd Bruijn, VU University Amsterdam
+%
+%     This program is free software: you can redistribute it and/or modify
+%     it under the terms of the GNU General Public License as published by
+%     the Free Software Foundation, either version 3 of the License, or
+%     (at your option) any later version.
+%
+%     This program is distributed in the hope that it will be useful,
+%     but WITHOUT ANY WARRANTY; without even the implied warranty of
+%     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%     GNU General Public License for more details.
+%% version history; march 2017, SMB updated from older versions by SMB, Jaap van Dieen, Kim van Schooten & others to make suitable
+% for general use (i.e. proper commenting, cleanup of code, etc)
 
 %% setting up some variables
 ws          = round(ws*fs); % as ws is input in cycles, and better to have it in samples
@@ -33,9 +50,13 @@ divergence=nanmean (log(divergence)); % calculate average for output
 
 %% calculate least squares fit
 L1 = 0.5*period*fs;
-L2 = 4*period*fs;
 Ps = polyfit(1/fs:1/fs:L1/fs,divergence(:,1:L1),1);
-Pl = polyfit(L2/fs:1/fs:ws/fs,divergence(:,L2:ws),1);
+if ws>4*period*fs
+    L2 = 4*period*fs;
+    Pl = polyfit(L2/fs:1/fs:ws/fs,divergence(:,L2:ws),1);
+else
+    Pl(:,1)=NaN;
+end
 lds=[Ps(:,1) Pl(:,1)];
 
 %% plot if indicated
@@ -50,5 +71,5 @@ if nargout==0 ||plotje==1
     title('Divergence curve');
     xlabel('Time (sec)');
     ylabel('Ln(divergence)');
-    set(gca,'Box','off') 
+    set(gca,'Box','off')
 end
