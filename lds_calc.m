@@ -3,7 +3,7 @@ function [divergence,lds]=lds_calc(state,ws,fs,period, plotje)
 % Input:    state: appropriate state space
 %           ws: window size over which divergence should be calculated(in seconds/cycles)
 %           fs: sample frequency
-%           period: dominant period in the signal(in samples),
+%           period: dominant period in the signal(in seconds/cycles),
 %           plotje: show a graph.
 % Output:   divergence: the divergence curve
 %           lds: the 2 estimates of the local divergence exponents ( long term and short term)
