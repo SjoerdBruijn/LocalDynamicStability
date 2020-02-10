@@ -10,7 +10,7 @@ function [state]=makestatelocal(signal,hc,n_dim,delay)
 %           lds calculations.
 %           n_dim: number of dimensions that the state space should consits of.
 %           delay: (optional!) delay in samples. When no input is given,
-%           this is set to 1. 
+%           this is set to 10. 
 % Output    state: n_dim dimensional state space, where all the states have
 %           been normalized such that there length is (length(hc)-1)*100 samples
 %           (i.e. 100 samples per stride on average.
