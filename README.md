@@ -6,7 +6,7 @@ Calculate local dynamic stability using Rosenstein's (1993) algorithm, the code 
 In short, the code can be used to generate a state space using embedding delay using [makestatelocal.m](https://github.com/SjoerdBruijn/LocalDynamicStability/blob/master/makestatelocal.m) (while normalizing time, as is common in gait research, see Bruijn et al., (2013)), after which the average logarithmic rate of divergence (i.e. the actual local dynamic stability metric) can be calculated either using [lds_calc.m](https://github.com/SjoerdBruijn/LocalDynamicStability/blob/master/lds_calc.m), which uses the traditional Rosenstein (1993) algorithm, or using [lds_calc_mehdizadeh.m](https://github.com/SjoerdBruijn/LocalDynamicStability/blob/master/lds_calc_mehdizadeh.m), which allows for using multiple nearest neighbours, and may be preferable according to Mehdizadeh (2019).
 
 Example code:
-```
+```matlab
 clear all;
 load 'testdata'
 
