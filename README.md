@@ -10,12 +10,13 @@ Example code:
 clear all;
 load 'testdata'
 
-ws      = 10;
-fs      = 100;
-showplot= 1;
-period  = 1;
-n_dim   = 5;
-delay   = 10;
+ws      = 10; % window size to track the divergence (gait cycles or seconds)
+fs      = 100; % sample frequency of the resampled data (we resample to 100 samples (on average) per stride)
+period  = 1; % the period of the resulting resampled signal is 1 (i.e. 1 stride every 100 samples on average)
+n_dim   = 5; % dimensionality of state space
+delay   = 10; % delay of state space (after time normalization
+showplot= 1; % show a figure of the resulting divergence curve
+
 
 % we want to do this on MLCoM velocity, not position
 CoM_ML_vel  = gradient(CoM_ML,1/fs_opto);
