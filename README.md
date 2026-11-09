@@ -5,9 +5,28 @@ Calculate local dynamic stability using Rosenstein's (1993) algorithm, the code 
 
 In short, the code can be used to generate a state space using embedding delay using [makestatelocal.m](https://github.com/SjoerdBruijn/LocalDynamicStability/blob/master/makestatelocal.m) (while normalizing time, as is common in gait research, see Bruijn et al., (2013)), after which the average logarithmic rate of divergence (i.e. the actual local dynamic stability metric) can be calculated either using [lds_calc.m](https://github.com/SjoerdBruijn/LocalDynamicStability/blob/master/lds_calc.m), which uses the traditional Rosenstein (1993) algorithm, or using [lds_calc_mehdizadeh.m](https://github.com/SjoerdBruijn/LocalDynamicStability/blob/master/lds_calc_mehdizadeh.m), which allows for using multiple nearest neighbours, and may be preferable according to Mehdizadeh (2019).
 
+Example code:
+```matlab
+clear all;
+load 'testdata'
+
+ws      = 10; % window size to track the divergence (gait cycles or seconds)
+fs      = 100; % sample frequency of the resampled data (we resample to 100 samples (on average) per stride)
+period  = 1; % the period of the resulting resampled signal is 1 (i.e. 1 stride every 100 samples on average)
+n_dim   = 5; % dimensionality of state space
+delay   = 10; % delay of state space (after time normalization
+showplot= 1; % show a figure of the resulting divergence curve
 
 
+% we want to do this on MLCoM velocity, not position
+CoM_ML_vel  = gradient(CoM_ML,1/fs_opto);
 
+% create a 5 dimensional time normalised state space, with delay of 10
+% samples
+state       = makestatelocal(CoM_ML_vel,events.lhs,n_dim,delay);
+% calculate local divergence exponent
+[divergence,lds] = lds_calc(state,ws,fs,period, showplot)
+```
 References:
   - Bruijn, S.M., O.G. Meijer, P.J. Beek, et al., Journal of the Royal Society, Interface (2013) Assessing the stability of human locomotion: a review of current measures. 10(83): p. 20120999.
   - Rosenstein, M.T., J.J. Collins, and C.J. Deluca, Physica D, (1993) A Practical Method for Calculating Largest Lyapunov Exponents from Small Data Sets. 65(1-2): p. 117-134.
